@@ -1,0 +1,32 @@
+variables:
+  GIT_DEPTH: 30
+  GIT_STRATEGY: fetch
+  SERVICE_IMAGE: "registry.some.dev/apis/demo-service"
+  SERVICE_NAME: "apis_demo_service"
+  DB_NAME: "demo_service"
+  SERVICE_NAME_K8S: "apis-demo-service"
+
+stages:
+  - init
+  - reset_approvals_check
+  - lint
+  - coverage
+  - build
+  - deploy
+  - migrate
+  - sca-scan
+
+include:
+  - project: 'devops/gitlab'
+    ref: master
+    file:
+      - '/ci/workflow.yml'
+      - '/ci/init.yml'
+      - '/ci/reset_approvals.yml'
+      - '/ci/sca-scan.yml'
+      - '/ci/lint.yml'
+      - '/ci/coverage-test.yml'
+      - '/ci/build-go.yml'
+      - '/ci/deploy.yml'
+      - '/ci/migrate.yml'
+#

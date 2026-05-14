@@ -1,0 +1,149 @@
+basePath: /demo-service
+definitions:
+  demo_internal_domain_sk_model.SkAdd:
+    properties:
+      id:
+        minimum: 1
+        type: integer
+      isActive:
+        type: boolean
+      name:
+        type: string
+    required:
+    - id
+    - name
+    type: object
+  demo_internal_domain_sk_model.SkEdit:
+    properties:
+      isActive:
+        type: boolean
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  demo_internal_domain_sk_model.SkItem:
+    properties:
+      id:
+        type: integer
+      isActive:
+        type: boolean
+      name:
+        type: string
+    type: object
+  demo_internal_util.ResponseOk-types_Nil:
+    properties:
+      data:
+        $ref: '#/definitions/types.Nil'
+      status:
+        type: string
+    type: object
+  demo_internal_util.ResponseOkPaginate-array_demo_internal_domain_sk_model_SkItem:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/demo_internal_domain_sk_model.SkItem'
+        type: array
+      status:
+        type: string
+      totalCount:
+        type: integer
+    type: object
+  types.Nil:
+    type: object
+info:
+  contact: {}
+  description: Демонстрация структуры сервиса и походов к разработке
+  title: Demo Service
+  version: "1.0"
+paths:
+  /admin/v1/sk:
+    get:
+      parameters:
+      - in: query
+        minimum: 1
+        name: limit
+        required: true
+        type: integer
+      - in: query
+        minimum: 0
+        name: offset
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/demo_internal_util.ResponseOkPaginate-array_demo_internal_domain_sk_model_SkItem'
+      summary: Список СК
+      tags:
+      - admin
+      - sk
+    post:
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/demo_internal_domain_sk_model.SkAdd'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/demo_internal_util.ResponseOk-types_Nil'
+      summary: Добавление СК
+      tags:
+      - admin
+      - sk
+  /admin/v1/sk/{id}:
+    post:
+      parameters:
+      - description: ID СК
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/demo_internal_domain_sk_model.SkEdit'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/demo_internal_util.ResponseOk-types_Nil'
+      summary: Редактирование СК
+      tags:
+      - admin
+      - sk
+  /public/v1/sk:
+    get:
+      parameters:
+      - in: query
+        minimum: 1
+        name: limit
+        required: true
+        type: integer
+      - in: query
+        minimum: 0
+        name: offset
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/demo_internal_util.ResponseOkPaginate-array_demo_internal_domain_sk_model_SkItem'
+      summary: Список СК
+      tags:
+      - public
+      - sk
+swagger: "2.0"
+tags:
+- description: Админ API
+  name: admin
+- description: Системное API
+  name: api
+- description: Публичное API
+  name: public

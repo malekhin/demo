@@ -1,0 +1,64 @@
+DB:
+  DRIVER: "pgx"
+  HOST: "postgres"
+  PORT: 5432
+  USER: "root"
+  PASSWORD: "root"
+  NAME: "main"
+  # Допустимые значения: cache_statement; cache_describe; exec; simple_protocol
+  QUERY_EXEC_MODE: "simple_protocol"
+  SSL_MODE: "disable"
+
+MONOLITH_DB:
+  DRIVER: "mysql"
+  HOST: "localhost"
+  PORT: 3306
+  USER: "root"
+  PASSWORD: "root"
+  NAME: "rc_main"
+
+CLICKHOUSE:
+  HOST: "localhost"
+  PORT: 9000
+  USER: "root"
+  PASSWORD: "root"
+  NAME: "default"
+  BATCH_WAITING: "1s"
+
+REDIS:
+  HOST: "redis"
+  PORT: 6379
+  USERNAME: ""
+  PASSWORD: ""
+  PREFIX: "demo_prod_"
+
+AUTHGATE:
+  HOST: "http://authgate:8086"
+  CACHE: 1m
+
+LOGGER:
+  ENCODING: "json"
+  LEVEL: "debug"
+
+CRON:
+  IMPORT_SUBAGENT:
+    START_TIME: "*/3 * * * *"
+    LIMIT: 5000
+  ACTIVE_SUBAGENT:
+    START_TIME: "*/5 * * * *"
+  ARCHIVE:
+    START_TIME: "*/1 * * * *"
+  START:
+    START_TIME: "*/1 * * * *"
+  HISTORY_CALC:
+    START_TIME: "*/1 * * * *"
+    LIMIT: 200
+    COUNT: 5
+    BATCH_SIZE: 200
+
+METRICS:
+  PREFIX: "demo_"
+
+APP:
+  SYSTEM_AGENTS: "1"
+  CALC_CACHE: "5m"

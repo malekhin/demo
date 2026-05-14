@@ -1,0 +1,231 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Демонстрация структуры сервиса и походов к разработке",
+        "title": "Demo Service",
+        "contact": {},
+        "version": "1.0"
+    },
+    "basePath": "/demo-service",
+    "paths": {
+        "/admin/v1/sk": {
+            "get": {
+                "tags": [
+                    "admin",
+                    "sk"
+                ],
+                "summary": "Список СК",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "minimum": 0,
+                        "type": "integer",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/demo_internal_util.ResponseOkPaginate-array_demo_internal_domain_sk_model_SkItem"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "admin",
+                    "sk"
+                ],
+                "summary": "Добавление СК",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/demo_internal_domain_sk_model.SkAdd"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/demo_internal_util.ResponseOk-types_Nil"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/v1/sk/{id}": {
+            "post": {
+                "tags": [
+                    "admin",
+                    "sk"
+                ],
+                "summary": "Редактирование СК",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID СК",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/demo_internal_domain_sk_model.SkEdit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/demo_internal_util.ResponseOk-types_Nil"
+                        }
+                    }
+                }
+            }
+        },
+        "/public/v1/sk": {
+            "get": {
+                "tags": [
+                    "public",
+                    "sk"
+                ],
+                "summary": "Список СК",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "minimum": 0,
+                        "type": "integer",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/demo_internal_util.ResponseOkPaginate-array_demo_internal_domain_sk_model_SkItem"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "demo_internal_domain_sk_model.SkAdd": {
+            "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "demo_internal_domain_sk_model.SkEdit": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "isActive": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "demo_internal_domain_sk_model.SkItem": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "demo_internal_util.ResponseOk-types_Nil": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/types.Nil"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "demo_internal_util.ResponseOkPaginate-array_demo_internal_domain_sk_model_SkItem": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/demo_internal_domain_sk_model.SkItem"
+                    }
+                },
+                "status": {
+                    "type": "string"
+                },
+                "totalCount": {
+                    "type": "integer"
+                }
+            }
+        },
+        "types.Nil": {
+            "type": "object"
+        }
+    },
+    "tags": [
+        {
+            "description": "Админ API",
+            "name": "admin"
+        },
+        {
+            "description": "Системное API",
+            "name": "api"
+        },
+        {
+            "description": "Публичное API",
+            "name": "public"
+        }
+    ]
+}

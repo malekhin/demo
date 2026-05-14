@@ -1,0 +1,71 @@
+services:
+  app:
+    build:
+      context: ./go
+    ports:
+      - ${APP_PORT:-8961}:8000
+    volumes:
+      - ./../..:/app
+    environment:
+      PG_HOST: postgres
+      PG_PORT: 5432
+      PG_USER: root
+      PG_PASSWORD: root
+      PG_DB: main
+      CH_HOST: clickhouse
+      CH_PORT: 9000
+      CH_USER: root
+      CH_PASSWORD: root
+      CH_DB: default
+      CONFIG_PATH: /app
+      ENVIRONMENT: dev
+      TZ: Europe/Moscow
+
+  postgres:
+    image: postgres:14-bullseye
+    ports:
+      - ${POSTGRES_PORT:-15506}:5432
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: main
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      TZ: Europe/Moscow
+
+  redis:
+    image: redis:7.0.15-alpine
+    ports:
+      - ${REDIS_PORT:-16389}:6379
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - ${ADMINER_PORT:-8962}:8080
+    environment:
+      - ADMINER_DEFAULT_SERVER=postgres
+    command: ["php", "-d", "post_max_size=500M", "-d", "upload_max_filesize=500M", "-S", "0.0.0.0:8080", "-t", "/var/www/html"]
+
+  mysql:
+    image: mysql:8.0.29
+    ports:
+      - ${MYSQL_PORT:-13306}:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: rc_main
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:23.9.2.56
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - ./volumes/clickhouse:/var/lib/clickhouse
+    ulimits:
+      nofile: 262144
+    environment:
+      CLICKHOUSE_DB: default
+      CLICKHOUSE_USER: root
+      CLICKHOUSE_PASSWORD: root

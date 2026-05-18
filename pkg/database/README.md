@@ -15,8 +15,6 @@ func NewSk(db database.Database) *Sk {
 }
 ```
 
-
-
 Пример: internal/domain/sk/storage/sk.go
 
 Как работает автомонтирование зависимостей можно прочесть тут internal/app.

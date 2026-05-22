@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"demo/internal/common"
+	historyModel "demo/internal/domain/history/model"
 	"demo/internal/domain/sk/model"
 	"demo/internal/domain/sk/storage"
 	storageModel "demo/internal/domain/sk/storage/model"
@@ -11,12 +12,14 @@ import (
 )
 
 type Sk struct {
-	skStorage *storage.Sk
+	skStorage      *storage.Sk
+	historyService History
 }
 
-func NewSk(skStorage *storage.Sk) *Sk {
+func NewSk(skStorage *storage.Sk, history History) *Sk {
 	return &Sk{
-		skStorage: skStorage,
+		skStorage:      skStorage,
+		historyService: history,
 	}
 }
 func (s *Sk) List(ctx context.Context, filter model.SkFilter) ([]model.SkItem, int, error) {
@@ -57,6 +60,15 @@ func (s *Sk) Add(ctx context.Context, request model.SkAdd) error {
 		return common.Wrap(err, "Add")
 	}
 
+	err = s.historyService.SaveAction(ctx, historyModel.HistoryAction{
+		Id:    sk.Id,
+		Type:  historyModel.Add,
+		Table: historyModel.Sk,
+	})
+	if err != nil {
+		return common.Wrap(err, "SaveAction")
+	}
+
 	return nil
 }
 
@@ -70,6 +82,15 @@ func (s *Sk) Edit(ctx context.Context, id int, request model.SkEdit) error {
 	_, err := s.skStorage.Edit(ctx, sk)
 	if err != nil {
 		return common.Wrap(err, "Edit")
+	}
+
+	err = s.historyService.SaveAction(ctx, historyModel.HistoryAction{
+		Id:    sk.Id,
+		Type:  historyModel.Edit,
+		Table: historyModel.Sk,
+	})
+	if err != nil {
+		return common.Wrap(err, "SaveAction")
 	}
 
 	return nil

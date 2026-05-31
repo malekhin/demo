@@ -5,6 +5,7 @@
 
 Содержит _(нажмите для перехода в соответствующему каталогу)_:
 
+- [`worker_pool`](worker_pool/) # WorkerPool для ограничения количества горутин
 - [`database`](database/) # Пакет для работы с реляционными базами данных
 - [`clickhouse`](clickhouse/) # Пакет для работы с Clickhose
 - [`scheduler`](scheduler/) # Планировщик задач
